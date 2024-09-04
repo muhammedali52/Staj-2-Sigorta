@@ -1,0 +1,117 @@
+﻿@model Customer
+@{
+    ViewData["Title"] = "CreateAppUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+
+<div class="container-fluid">
+    <a class="btn btn-secondary mb-3" asp-action="Index" asp-controller="AppUser">Geri</a>
+    <div class="card">
+        <div class="card-header bg-success mb-3">
+            <h2 class="card-title text-white font-weight-bold">Kullanıcı Ekleme Sayfası</h2>
+        </div>
+        <div class="card-body">
+            <form id="createAppUserForm" asp-action="CreateAppUser" asp-controller="AppUser" method="post">
+                <div class="row mb-2">
+                    <div class="col-9">
+                        <div class="mb-2">
+                            <label>Adı</label>
+                            <input type="text" asp-for="FirstName" class="form-control" required />
+                        </div>
+                        <div class="mb-2">
+                            <label>Soyadı</label>
+                            <input type="text" asp-for="LastName" class="form-control" required />
+                        </div>
+                        <div class="mb-2">
+                            <label>Kullanıcı Adı</label>
+                            <input type="text" asp-for="UserName" class="form-control" required />
+                        </div>
+                        <div class="mb-2">
+                            <label>TC Kimlik Numarası</label>
+                            <input type="number" asp-for="IdentityNumber" class="form-control" required />
+                        </div>
+                        <div class="mb-2">
+                            <label>Telefon Numarası</label>
+                            <input type="text" asp-for="PhoneNumber" class="form-control" required />
+                        </div>
+                        <div class="mb-2">
+                            <label>E-Posta Adresi</label>
+                            <input type="email" asp-for="Email" class="form-control" required />
+                        </div>
+                        <div class="mb-2">
+                            <label>Açık Adresi</label>
+                            <textarea id="richEditor" asp-for="Address" class="form-control" rows="8"></textarea>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <button type="submit" class="btn btn-success w-100">Kaydet</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Başarı</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Kullanıcı başarıyla oluşturuldu. Müsteri Numarası: <span id="userId"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to handle form submission and modal display -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#createAppUserForm').on('submit', function (event) {
+            event.preventDefault(); // Formun varsayılan gönderimini engelle
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        // Yeni müşteri ID ile modal göster
+                        $('#userId').text(response.customerNumber);
+                        $('#successModal').modal('show');
+                    } else {
+                        // Hata mesajını göster
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Bir hata oluştu.');
+                }
+            });
+        });
+
+        // Modal kapandığında form alanlarını temizle ve formu sıfırla
+        $('#successModal').on('hidden.bs.modal', function () {
+            $('#createAppUserForm')[0].reset(); // Form alanlarını sıfırla
+        });
+    });
+
+</script>

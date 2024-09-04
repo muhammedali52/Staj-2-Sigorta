@@ -1,0 +1,68 @@
+﻿@model List<Police>
+@{
+    ViewData["Title"] = "PoliceRide";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int sayac = 1;
+
+    Func<string, string> Kes = (string degisken) =>
+    {
+        if (!string.IsNullOrEmpty(degisken) && degisken.Length > 50)
+        {
+            return degisken.Substring(0, 50) + "...";
+        }
+        return degisken;
+    };
+}
+
+<h1>Kesilen Policeler</h1>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Kod</th>
+                <th>Adı</th>
+                <th>Başlangıç Tarihi</th>
+                <th>Bitiş Tarihi</th>
+                <th>Plaka</th>
+                <th>Marka Kodu</th>
+                <th>Marka</th>
+                <th>Model</th>
+                <th>Model Yılı</th>
+                <th>Tip</th>
+                <th>LPG Miktarı</th>
+                <th>Diğer Aksesuarlar</th>
+                <th>Tedavi Masrafları</th>
+                <th>IMM Kategorisi</th>
+                <th>Sigortalı Mesleği</th>
+                <th>Toplam Fiyat</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="word-break:keep-all">
+                    <td>@sayac</td>
+                    <td>@Kes(item.Code)</td>
+                    <td>@Kes(item.Name)</td>
+                    <td>@item.StartDate.ToString("dd.MM.yyyy")</td>
+                    <td>@item.EndDate.ToString("dd.MM.yyyy")</td>
+                    <td>@Kes(item.VhiclePlate)</td>
+                    <td>@Kes(item.VehicleBrandCode)</td>
+                    <td>@Kes(item.VehicleBrand)</td>
+                    <td>@Kes(item.VehicleModel)</td>
+                    <td>@item.VehicleYear</td>
+                    <td>@Kes(item.VehicleType)</td>
+                    <td>@item.Lpgamount.ToString("C")</td>
+                    <td>@item.OtherAccessoriesAmount.ToString("C")</td>
+                    <td>@item.TreatmentCosts.ToString("C")</td>
+                    <td>@item.ImmCategory.ToString("C")</td>
+                    <td>@Kes(item.InsuredProfession)</td>
+                    <td>@item.TotalAmount.ToString("C")</td>
+                </tr>
+                sayac++;
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Customer>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<a href="/AppUser/CreateAppUser" class="btn btn-success mb-3">Kullanıcı Ekle</a>
+
+<form method="get" action="@Url.Action("Index")" class="mb-3">
+    <div class="input-group mb-3">
+        <input type="text" name="searchString" class="form-control" placeholder="Müşteri numarası veya adına göre ara..." value="@ViewBag.CurrentFilter" />
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Ara</button>
+        </div>
+    </div>
+</form>
+
+
+<h1>Kullanıcı Listesi</h1>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <tr>
+            <th>Müsteri Numarası</th>
+            <th>Adı Soyadı</th>
+            <th>Kullanıcı Adı</th>
+            <th>TC Kimlik Numarası</th>
+            <th>Telefon Numarası Numarası</th>
+            <th>E-Posta Adresi</th>
+            <th>Açık Adres</th>
+            <th>Polici Kes</th>
+
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CustomerNumber</td>
+                <td>@item.FirstName @item.LastName</td>
+                <td>@item.UserName</td>
+                <td>@item.IdentityNumber</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.Email</td>
+                <td style="word-break:keep-all;">@item.Address</td>
+                <td>
+                    <a href="/Police/PoliceRide/@item.Id" class="btn btn-primary">Police Kes</a>
+                </td>
+
+            </tr>
+        }
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#customerNotFoundModal').modal('show');
+    });
+</script>
+
